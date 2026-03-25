@@ -106,14 +106,24 @@ public class EmployeService {
     double ratio = (double) caTraite / objectifCa;
     int perf = Entreprise.PERFORMANCE_BASE;
 
-    if (ratio >= 0.8 && ratio < 0.95) perf = Math.max(perf, employe.getPerformance() - 2);
-    else if (ratio >= 0.95 && ratio <= 1.05) perf = Math.max(perf, employe.getPerformance());
-    else if (ratio > 1.05 && ratio <= 1.2) perf = employe.getPerformance() + 1;
-    else if (ratio > 1.2) perf = employe.getPerformance() + 4;
+    // if (ratio >= 0.8 && ratio < 0.95) perf = Math.max(perf, employe.getPerformance() - 2);
+    // else if (ratio >= 0.95 && ratio <= 1.05) perf = Math.max(perf, employe.getPerformance());
+    // else if (ratio > 1.05 && ratio <= 1.2) perf = employe.getPerformance() + 1;
+    // else if (ratio > 1.2) perf = employe.getPerformance() + 4;
 
-    // Ajustement par rapport à la moyenne
-    Double perfMoy = employeRepository.avgPerformanceWhereMatriculeStartsWith("C");
-    if (perfMoy != null && perf > perfMoy) perf++;
+    // // Ajustement par rapport à la moyenne
+    // Double perfMoy = employeRepository.avgPerformanceWhereMatriculeStartsWith("C");
+    // if (perfMoy != null && perf > perfMoy) perf++;
+
+    private int calculPerformanceParRatio(double ratio, int currentPerf) {
+    if (ratio > 1.2) return currentPerf + 4;      // +1 (if)
+    if (ratio > 1.05) return currentPerf + 1;     // +1 (if)
+    if (ratio >= 0.95) return Math.max(basePerf, currentPerf);  // +1 (if)
+    if (ratio >= 0.8) return Math.max(basePerf, currentPerf - 2); // +1 (if)
+    
+    return basePerf;
+
+
 }
 
 }
